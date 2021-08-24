@@ -1,3 +1,4 @@
+import 'package:creator/common/decolation.dart';
 import 'package:flutter/material.dart';
 
 class SalonApplyingScreen extends StatefulWidget {
@@ -69,7 +70,7 @@ class _SalonApplyingScreenState extends State<SalonApplyingScreen> {
             style: Theme.of(context).textTheme.bodyText1,
             onChanged: (_) => _updateContext(),
             controller: fullnameController,
-            decoration: _buildInputDecoration("お名前"),
+            decoration: buildInputDecoration("お名前", context),
           ),
         ),
         SizedBox(height: 16),
@@ -77,8 +78,9 @@ class _SalonApplyingScreenState extends State<SalonApplyingScreen> {
           controller: emailController,
           onChanged: (_) => _updateContext(),
           style: Theme.of(context).textTheme.bodyText1,
-          decoration: _buildInputDecoration(
+          decoration: buildInputDecoration(
             "メールアドレス",
+            context,
           ),
         ),
         SizedBox(height: 16),
@@ -89,7 +91,7 @@ class _SalonApplyingScreenState extends State<SalonApplyingScreen> {
             controller: reasonController,
             onChanged: (_) => _updateContext(),
             style: Theme.of(context).textTheme.bodyText1,
-            decoration: _buildInputDecoration("申請理由"),
+            decoration: buildInputDecoration("申請理由", context),
             maxLength: 300,
             maxLines: 10,
           ),
@@ -116,19 +118,19 @@ class _SalonApplyingScreenState extends State<SalonApplyingScreen> {
     );
   }
 
-  InputDecoration _buildInputDecoration(String hintText) {
-    return InputDecoration(
-      counterStyle: TextStyle(
-        color: Colors.white,
-      ),
-      hintText: hintText,
-      hintStyle: Theme.of(context).textTheme.bodyText1,
-      border: OutlineInputBorder(),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+  // InputDecoration _buildInputDecoration(String hintText) {
+  //   return InputDecoration(
+  //     counterStyle: TextStyle(
+  //       color: Colors.white,
+  //     ),
+  //     hintText: hintText,
+  //     hintStyle: Theme.of(context).textTheme.bodyText1,
+  //     border: OutlineInputBorder(),
+  //     enabledBorder: OutlineInputBorder(
+  //       borderSide: BorderSide(
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //   );
+  // }
 }
