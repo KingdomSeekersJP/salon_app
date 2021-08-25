@@ -1,9 +1,14 @@
+import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:creator/common/color.dart';
+import 'package:creator/firebase/database.dart';
+import 'package:creator/screens/home_screen.dart';
 import 'package:creator/screens/login_screen.dart';
-import 'package:creator/screens/salon_applying_screen.dart';
+import 'package:creator/screens/reason_for_creating_the_salon_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-// TODO(hiroki):これ必要？
 bool userLoggedIn = false;
 
 class KSCreatorApp extends StatelessWidget {
@@ -13,11 +18,35 @@ class KSCreatorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //現時点で、一番最初の画面に表示する画面はログインにしておく。
-      home: LoginScreen(),
+
       theme: _buildThemeData(),
       routes: {
-        '/salon_applying_screen': (context) => SalonApplyingScreen(),
+        '/salon_applying_screen': (context) =>
+            ReasonsForCreatingTheSalonScreen(),
+        '/home': (context) => HomeScreen(),
       },
+
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (_, snapshot) {
+          // final user = snapshot.data as dynamic;
+
+          if (snapshot.hasData) {
+            return _buildHomePage();
+          } else {
+            return LoginScreen();
+          }
+
+          // if (snapshot.hasData &&
+          //     FirebaseFirestore.instance
+          //             .collection(DbHandler.usersColletion)
+          //             .doc(user.email) !=
+          //         null) {
+          //   return _buildHomePage();
+          // }
+          // return LoginScreen();
+        },
+      ),
     );
   }
 
@@ -65,6 +94,52 @@ class KSCreatorApp extends StatelessWidget {
           fontWeight: FontWeight.w300,
         ),
       ),
+    );
+  }
+
+  TextTheme _buildTextTheme(ThemeData defaultThemeData) =>
+      defaultThemeData.textTheme
+          .copyWith(
+            headline1: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+            headline3: TextStyle(
+              color: primaryColor,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+            button: TextStyle(
+              fontSize: 18,
+            ),
+            headline5: TextStyle(
+              color: primaryColor,
+              fontSize: 10,
+            ),
+          )
+          .apply(
+            fontFamily: 'NotoSansJP',
+            fontSizeDelta: 2,
+          );
+  Widget _buildHomePage() {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection(DbHandler.usersColletion)
+          .doc(FirebaseAuth.instance.currentUser?.email)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return LinearProgressIndicator();
+        }
+
+        if (snapshot.data!.exists &&
+            snapshot.data?.get(FieldPath(['role'])) == 1) {
+          return HomeScreen();
+        } else if (snapshot.data?.get(FieldPath(['role'])) == 0) {
+          return ReasonsForCreatingTheSalonScreen();
+        }
+        return LoginScreen();
+      },
     );
   }
 }

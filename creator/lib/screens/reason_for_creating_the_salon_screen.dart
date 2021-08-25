@@ -1,14 +1,16 @@
-import 'package:creator/common/decolation.dart';
+import 'package:creator/common/decoration.dart';
 import 'package:flutter/material.dart';
 
-class SalonApplyingScreen extends StatefulWidget {
-  const SalonApplyingScreen({Key? key}) : super(key: key);
+class ReasonsForCreatingTheSalonScreen extends StatefulWidget {
+  const ReasonsForCreatingTheSalonScreen({Key? key}) : super(key: key);
 
   @override
-  _SalonApplyingScreenState createState() => _SalonApplyingScreenState();
+  _ReasonsForCreatingTheSalonScreenState createState() =>
+      _ReasonsForCreatingTheSalonScreenState();
 }
 
-class _SalonApplyingScreenState extends State<SalonApplyingScreen> {
+class _ReasonsForCreatingTheSalonScreenState
+    extends State<ReasonsForCreatingTheSalonScreen> {
   bool isFormsFilled = false;
   TextEditingController fullnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
