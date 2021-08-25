@@ -17,15 +17,12 @@ class KSCreatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //現時点で、一番最初の画面に表示する画面はログインにしておく。
-
       theme: _buildThemeData(),
       routes: {
         '/salon_applying_screen': (context) =>
             ReasonsForCreatingTheSalonScreen(),
         '/home': (context) => HomeScreen(),
       },
-
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (_, snapshot) {
@@ -131,7 +128,7 @@ class KSCreatorApp extends StatelessWidget {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         }
-
+        //TODO(hiroki): 強制アンラップのハンドリング
         if (snapshot.data!.exists &&
             snapshot.data?.get(FieldPath(['role'])) == 1) {
           return HomeScreen();
