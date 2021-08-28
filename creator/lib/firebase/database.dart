@@ -25,4 +25,12 @@ class DbHandler {
     var dbObject = await userCollectionRef.doc(email).get();
     return dbObject = UserModel.fromMap(dbObject.data());
   }
+
+  Future getUserDoc(String email) async {
+    return await userCollectionRef.doc(email).get();
+  }
+
+  Future getSalonsDocWhereOwnerIsEqualToUserEmail(String email) async {
+    return await salonCollectionRef.where('owner', isEqualTo: email).get();
+  }
 }

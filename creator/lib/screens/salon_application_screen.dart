@@ -1,16 +1,14 @@
 import 'package:creator/common/decoration.dart';
 import 'package:flutter/material.dart';
 
-class ReasonsForCreatingTheSalonScreen extends StatefulWidget {
-  const ReasonsForCreatingTheSalonScreen({Key? key}) : super(key: key);
+class SalonApplicationScreen extends StatefulWidget {
+  const SalonApplicationScreen({Key key}) : super(key: key);
 
   @override
-  _ReasonsForCreatingTheSalonScreenState createState() =>
-      _ReasonsForCreatingTheSalonScreenState();
+  _SalonApplicationScreenState createState() => _SalonApplicationScreenState();
 }
 
-class _ReasonsForCreatingTheSalonScreenState
-    extends State<ReasonsForCreatingTheSalonScreen> {
+class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   bool isFormsFilled = false;
   TextEditingController fullnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -119,20 +117,4 @@ class _ReasonsForCreatingTheSalonScreenState
       ],
     );
   }
-
-  // InputDecoration _buildInputDecoration(String hintText) {
-  //   return InputDecoration(
-  //     counterStyle: TextStyle(
-  //       color: Colors.white,
-  //     ),
-  //     hintText: hintText,
-  //     hintStyle: Theme.of(context).textTheme.bodyText1,
-  //     border: OutlineInputBorder(),
-  //     enabledBorder: OutlineInputBorder(
-  //       borderSide: BorderSide(
-  //         color: Colors.white,
-  //       ),
-  //     ),
-  //   );
-  // }
 }

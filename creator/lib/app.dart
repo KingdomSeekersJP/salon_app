@@ -3,93 +3,74 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:creator/common/color.dart';
 import 'package:creator/firebase/database.dart';
+import 'package:creator/models/user_model.dart';
 import 'package:creator/screens/home_screen.dart';
 import 'package:creator/screens/login_screen.dart';
-import 'package:creator/screens/reason_for_creating_the_salon_screen.dart';
+import 'package:creator/screens/salon_application_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 bool userLoggedIn = false;
 
 class KSCreatorApp extends StatelessWidget {
-  const KSCreatorApp({Key? key}) : super(key: key);
+  const KSCreatorApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: _buildThemeData(),
+      theme: _buildThemeData(context),
       routes: {
-        '/salon_applying_screen': (context) =>
-            ReasonsForCreatingTheSalonScreen(),
+        '/salon_application_screen': (context) => SalonApplicationScreen(),
         '/home': (context) => HomeScreen(),
       },
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (_, snapshot) {
-          // final user = snapshot.data as dynamic;
-
           if (snapshot.hasData) {
             return _buildHomePage();
           } else {
             return LoginScreen();
           }
-
-          // if (snapshot.hasData &&
-          //     FirebaseFirestore.instance
-          //             .collection(DbHandler.usersColletion)
-          //             .doc(user.email) !=
-          //         null) {
-          //   return _buildHomePage();
-          // }
-          // return LoginScreen();
         },
       ),
     );
   }
 
-  ThemeData _buildThemeData() {
-    return ThemeData(
+  ThemeData _buildThemeData(BuildContext context) {
+    var defaultThemeData = Theme.of(context);
+
+    return defaultThemeData.copyWith(
+      primaryColor: primaryColor,
+      textTheme: _buildTextTheme(defaultThemeData),
+      inputDecorationTheme: defaultThemeData.inputDecorationTheme.copyWith(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderSide: BorderSide(),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(primaryColor),
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return Colors.white38;
-              }
-              return Colors.blue;
-            },
-          ),
+          backgroundColor: MaterialStateProperty.all(primaryColor),
+          foregroundColor: MaterialStateProperty.all(Colors.white),
         ),
       ),
-      scaffoldBackgroundColor: primaryColor,
-      appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white,
-        textTheme: TextTheme(
-          headline1: TextStyle(
-            color: primaryColor,
-          ),
+      dividerColor: Color.fromRGBO(193, 193, 193, 1),
+      appBarTheme: defaultThemeData.appBarTheme.copyWith(
+        shadowColor: Colors.transparent,
+        color: Colors.white,
+        foregroundColor: Colors.black,
+        textTheme: defaultThemeData.textTheme.apply(
+          displayColor: Colors.black,
         ),
       ),
-      textTheme: TextTheme(
-        headline1: TextStyle(
-          color: primaryColor,
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-        ),
-        headline2: TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-        ),
-        headline3: TextStyle(
-          color: primaryColor,
-          fontSize: 16,
-        ),
-        bodyText1: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-        ),
+      tabBarTheme: defaultThemeData.tabBarTheme.copyWith(
+        labelColor: primaryColor,
+        unselectedLabelColor: primaryColor,
       ),
     );
   }
@@ -122,18 +103,19 @@ class KSCreatorApp extends StatelessWidget {
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection(DbHandler.usersColletion)
-          .doc(FirebaseAuth.instance.currentUser?.email)
+          .doc(FirebaseAuth.instance.currentUser.email)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         }
-        //TODO(hiroki): 強制アンラップのハンドリング
-        if (snapshot.data!.exists &&
-            snapshot.data?.get(FieldPath(['role'])) == 1) {
+
+        // Todo(hiroki): UserModelを使用すること。
+        if (snapshot.data.exists &&
+            snapshot.data.get(FieldPath(['role'])) == 1) {
           return HomeScreen();
-        } else if (snapshot.data?.get(FieldPath(['role'])) == 0) {
-          return ReasonsForCreatingTheSalonScreen();
+        } else if (snapshot.data.get(FieldPath(['role'])) == 0) {
+          return SalonApplicationScreen();
         }
         return LoginScreen();
       },

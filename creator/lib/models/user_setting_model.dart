@@ -2,7 +2,7 @@ class UserSettings {
   final bool pushNotifications;
 
   UserSettings({
-    required this.pushNotifications,
+    this.pushNotifications,
   });
 
   Map<String, dynamic> toMap() {
