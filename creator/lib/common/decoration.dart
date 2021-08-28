@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 InputDecoration buildInputDecoration(String hintText, BuildContext context) {
   return InputDecoration(
     counterStyle: TextStyle(

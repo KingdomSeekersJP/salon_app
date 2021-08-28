@@ -5,11 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-Future<UserCredential?> signInWithGoogle() async {
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  final GoogleSignInAuthentication googleAuth =
-      //TODO(hiroki): 強制アンラップのハンドリング
-      await googleUser!.authentication;
+Future<UserCredential> signInWithGoogle() async {
+  final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
   final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
   return await FirebaseAuth.instance.signInWithCredential(credential);
@@ -50,7 +48,7 @@ Future<UserCredential> signInWithApple() async {
 }
 
 Future signOut() async {
-  final User? user = FirebaseAuth.instance.currentUser;
+  final User user = FirebaseAuth.instance.currentUser;
   if (user != null) {
     await FirebaseAuth.instance.signOut();
   }

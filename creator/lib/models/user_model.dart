@@ -10,17 +10,17 @@ class UserModel {
   // List<String> salons;
 
   UserModel({
-    required this.email,
-    required this.role,
-    required this.settings,
-    required this.created,
-    required this.profile,
+    this.email,
+    this.role,
+    this.settings,
+    this.created,
+    this.profile,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'email': email,
-      'rold': role.index,
+      'role': role.index,
       'setting': settings.toMap(),
       'created': created,
       'profile': profile.toMap(),
