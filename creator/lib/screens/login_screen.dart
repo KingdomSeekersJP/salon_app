@@ -105,9 +105,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navigateBasedOnRole() {
-    // final _auth = FirebaseAuth.instance.currentUser;
-
-    //TODO(hiroki): DbHandlerを使って、UserModelを使用すること
     DbHandler dbHandler = DbHandler();
     final User user = FirebaseAuth.instance.currentUser;
 
@@ -116,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushReplacementNamed('/salon_application_screen');
       }
       if (snapshot.get(FieldPath(['role'])) == 0) {
-        dbHandler.getSalonsDocWhereOwnerIsEqualToUserEmail(user.email).then(
+        dbHandler.listSalonsByOwner(user.email).then(
           (snapshot) {
             if (snapshot.docs.isNotEmpty) {
               Navigator.of(context).pushReplacementNamed('/home');

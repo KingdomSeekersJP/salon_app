@@ -30,7 +30,7 @@ class DbHandler {
     return await userCollectionRef.doc(email).get();
   }
 
-  Future getSalonsDocWhereOwnerIsEqualToUserEmail(String email) async {
+  Future listSalonsByOwner(String email) async {
     return await salonCollectionRef.where('owner', isEqualTo: email).get();
   }
 }
