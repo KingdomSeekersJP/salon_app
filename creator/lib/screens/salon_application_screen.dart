@@ -37,11 +37,11 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: ListView(
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildFormDescription(),
-                _buildApplicationForms(),
+                _buildApplicationForms(screenWidth),
                 _buildSubmitButton(screenWidth)
               ],
             ),
@@ -62,26 +62,21 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     );
   }
 
-  Widget _buildApplicationForms() {
+  Widget _buildApplicationForms(double screenWidth) {
     return Column(
       children: [
-        Container(
-          child: TextField(
-            style: Theme.of(context).textTheme.bodyText1,
-            onChanged: (_) => _updateContext(),
-            controller: fullnameController,
-            decoration: buildInputDecoration("お名前", context),
-          ),
+        _buildTextFieldWithBorderline(
+          fullnameController,
+          TextInputType.name,
+          "お名前",
+          screenWidth,
         ),
         SizedBox(height: 16),
-        TextField(
-          controller: emailController,
-          onChanged: (_) => _updateContext(),
-          style: Theme.of(context).textTheme.bodyText1,
-          decoration: buildInputDecoration(
-            "メールアドレス",
-            context,
-          ),
+        _buildTextFieldWithBorderline(
+          emailController,
+          TextInputType.emailAddress,
+          "メールアドレス",
+          screenWidth,
         ),
         SizedBox(height: 16),
         Container(
@@ -95,8 +90,34 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
             maxLength: 300,
             maxLines: 10,
           ),
-        )
+        ),
       ],
+    );
+  }
+
+  Widget _buildTextFieldWithBorderline(
+    TextEditingController controller,
+    TextInputType keyboardType,
+    String label,
+    double width,
+  ) {
+    return Container(
+      width: width,
+      height: 32,
+      child: TextField(
+        onChanged: (_) => _updateContext(),
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black, width: 0.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black, width: 0.5),
+            ),
+            hintText: label),
+      ),
     );
   }
 
@@ -104,8 +125,9 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     return Column(
       children: [
         Text(
-          "オンラインサロン作成申請",
-          style: Theme.of(context).textTheme.headline2,
+          "オンラインサロン\n作成申請",
+          style: Theme.of(context).textTheme.headline3,
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 32),
         Text(
