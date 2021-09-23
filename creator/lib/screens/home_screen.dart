@@ -13,37 +13,7 @@ class HomeScreen extends StatelessWidget {
         title: Text('ホーム'),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Text(
-                "testPage",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text("ログアウト"),
-              onTap: () async {
-                await FirebaseAuth.instance.signOut();
-                await Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginScreen();
-                    },
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
+      drawer: _buildDrawer(context),
       body: Center(
         child: Text(
           'Hello World',
@@ -51,6 +21,28 @@ class HomeScreen extends StatelessWidget {
             fontSize: 40,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          ListTile(
+            title: Text("ログアウト"),
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              await Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return LoginScreen();
+                  },
+                ),
+              );
+            },
+          )
+        ],
       ),
     );
   }
