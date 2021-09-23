@@ -1,4 +1,6 @@
 import 'package:creator/common/decoration.dart';
+import 'package:creator/screens/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SalonApplicationScreen extends StatefulWidget {
@@ -28,9 +30,42 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           "開設申請",
           style: Theme.of(context).textTheme.headline3,
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Text(
+                "testPage",
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text("ログアウト"),
+              onTap: () async {
+                print("ログアウトボタンを押した");
+                await FirebaseAuth.instance.signOut();
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return LoginScreen();
+                    },
+                  ),
+                );
+              },
+            )
+          ],
         ),
       ),
       body: SafeArea(
