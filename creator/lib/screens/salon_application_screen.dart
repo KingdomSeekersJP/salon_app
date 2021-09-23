@@ -30,50 +30,20 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           "開設申請",
           style: Theme.of(context).textTheme.headline3,
         ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Text(
-                "testPage",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text("ログアウト"),
-              onTap: () async {
-                print("ログアウトボタンを押した");
-                await FirebaseAuth.instance.signOut();
-                await Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginScreen();
-                    },
-                  ),
-                );
-              },
-            )
-          ],
+        iconTheme: IconThemeData(
+          color: Colors.black,
         ),
       ),
+      drawer: _buildDrawer(context),
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
           child: Center(
             child: ListView(
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildFormDescription(),
                 _buildApplicationForms(screenWidth),
@@ -82,6 +52,29 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          ListTile(
+            title: Text("ログアウト"),
+            onTap: () async {
+              print("ログアウトボタンを押した");
+              await FirebaseAuth.instance.signOut();
+              await Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return LoginScreen();
+                  },
+                ),
+              );
+            },
+          )
+        ],
       ),
     );
   }
@@ -144,14 +137,15 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         controller: controller,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black, width: 0.5),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black, width: 0.5),
-            ),
-            hintText: label),
+          contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 0.5),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 0.5),
+          ),
+          hintText: label,
+        ),
       ),
     );
   }
