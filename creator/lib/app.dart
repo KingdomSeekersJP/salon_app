@@ -6,6 +6,7 @@ import 'package:creator/firebase/database.dart';
 import 'package:creator/models/user_model.dart';
 import 'package:creator/screens/home_screen.dart';
 import 'package:creator/screens/login_screen.dart';
+import 'package:creator/screens/registration_success_screen.dart';
 import 'package:creator/screens/salon_application_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,14 @@ class KSCreatorApp extends StatelessWidget {
     return MaterialApp(
       theme: _buildThemeData(context),
       routes: {
-        '/salon_application_screen': (context) => SalonApplicationScreen(),
+        //Login画面
+        '/login': (context) => LoginScreen(),
+        // Home画面
         '/home': (context) => HomeScreen(),
+        // サロン開設申請画面
+        '/salon_application_screen': (context) => SalonApplicationScreen(),
+        // サロン申請Thanks画面
+        '/registration_success': (context) => RegistrationSuccessScreen(),
       },
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -105,12 +112,11 @@ class KSCreatorApp extends StatelessWidget {
           .collection(DbHandler.usersColletion)
           .doc(FirebaseAuth.instance.currentUser.email)
           .snapshots(),
-      builder: (context, snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         }
-
-        // Todo(hiroki): UserModelを使用すること。
+        // roleが1の時はHomeScreen()、roleが0の時はSalonApplicationScreen()
         if (snapshot.data.exists &&
             snapshot.data.get(FieldPath(['role'])) == 1) {
           return HomeScreen();

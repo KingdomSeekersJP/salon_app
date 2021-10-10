@@ -1,5 +1,7 @@
 import 'package:creator/common/decoration.dart';
 import 'package:creator/screens/login_screen.dart';
+import 'package:creator/widgets/custom_button.dart';
+import 'package:creator/widgets/custom_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,24 +13,37 @@ class SalonApplicationScreen extends StatefulWidget {
 }
 
 class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
-  bool isFormsFilled = false;
-  TextEditingController fullnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController reasonController = TextEditingController();
+  bool _noFieldsEmpty = false;
+  bool _submitInProgress = false;
 
-  void _updateContext() {
-    var _isFilled = fullnameController.text.isNotEmpty &&
-        emailController.text.isNotEmpty &&
-        reasonController.text.isNotEmpty;
-    setState(() {
-      isFormsFilled = _isFilled;
-    });
+  // final contentController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final reasonController = TextEditingController();
+
+  void _updateScreenState() {
+    setState(
+      () {
+        _noFieldsEmpty = (
+            // contentController.text.isEmpty ||
+            firstNameController.text.isNotEmpty &&
+                lastNameController.text.isNotEmpty &&
+                emailController.text.isNotEmpty &&
+                reasonController.text.isNotEmpty);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final mq = MediaQuery.of(context).size;
+    final screenWidth = mq.width;
+    final screenHeight = mq.height;
+    final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           "開設申請",
@@ -39,19 +54,29 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         ),
       ),
       drawer: _buildDrawer(context),
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-          child: Center(
-            child: ListView(
-              children: [
-                _buildFormDescription(),
-                _buildApplicationForms(screenWidth),
-                _buildSubmitButton(screenWidth)
-              ],
+      body: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: [
+          _submitInProgress ? LinearProgressIndicator() : Container(),
+          SafeArea(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                child: Center(
+                  child: ListView(
+                    children: [
+                      _buildFormDescription(),
+                      _buildApplicationForms(screenWidth),
+                      _buildSubmitButton(screenWidth, screenHeight),
+                      SizedBox(height: 32.0),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -79,27 +104,81 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     );
   }
 
-  Widget _buildSubmitButton(double screenWidth) {
-    return Container(
-      height: screenWidth * 0.12,
-      width: screenWidth,
-      child: ElevatedButton(
-        onPressed: isFormsFilled ? () {} : null,
-        child: Text("申請"),
-      ),
+  Widget _buildSubmitButton(double screenWidth, double screenHeight) {
+    return CustomButton(
+      text: "申請",
+      width: screenWidth * 0.4,
+      height: screenHeight * 0.10,
+      function: _noFieldsEmpty
+          ? () async {
+              showCustomDialog(
+                content: "内容にお間違えがなければ、\n送信ボタンを押してください\n確認メールを送信します",
+                leftFunction: _noFieldsEmpty ? () => _submitForm() : null,
+                leftButtonText: "送信",
+                rightFunction: () => Navigator.pop(context),
+                rightButtonText: "取り消し",
+                context: context,
+              );
+            }
+          : null,
     );
   }
+
+  Future _submitForm() async {
+    setState(() {
+      _submitInProgress = true;
+    });
+
+    //TODO: ここで登録メールを送信する。現在、未実装のためゴスペルサロンのコードを入れているが、コメントアウトしている。
+    //   await sendSalonRegistrationThanksMail(
+    //     text: contentController.text,
+    //     fullName: "${lastNameController.text} ${firstNameController.text}",
+    //     phoneNumber: phoneNumberController.text,
+    //   );
+
+    setState(() {
+      _submitInProgress = false;
+    });
+
+    Navigator.of(context).pushReplacementNamed('/registration_success');
+  }
+
+  // Future _submitForm() async {
+  //   setState(() {
+  //     _submitInProgress = true;
+  //   });
+
+  //   await sendSalonRegistrationThanksMail(
+  //     text: contentController.text,
+  //     fullName: "${lastNameController.text} ${firstNameController.text}",
+  //     phoneNumber: phoneNumberController.text,
+  //   );
+
+  //   setState(() {
+  //     _submitInProgress = false;
+  //   });
+
+  //   Navigator.of(context).pushReplacementNamed('/registration_success');
+  // }
 
   Widget _buildApplicationForms(double screenWidth) {
     return Column(
       children: [
         _buildTextFieldWithBorderline(
-          fullnameController,
+          firstNameController,
           TextInputType.name,
-          "お名前",
+          "名前",
           screenWidth,
         ),
         SizedBox(height: 16),
+        _buildTextFieldWithBorderline(
+          lastNameController,
+          TextInputType.name,
+          "名字",
+          screenWidth,
+        ),
+        SizedBox(height: 16),
+        //TODO(PR_#8):google login時には、最初からメールアドレスをつけておく。
         _buildTextFieldWithBorderline(
           emailController,
           TextInputType.emailAddress,
@@ -112,7 +191,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
           height: 300,
           child: TextField(
             controller: reasonController,
-            onChanged: (_) => _updateContext(),
+            onChanged: (_) => _updateScreenState(),
             style: Theme.of(context).textTheme.bodyText1,
             decoration: buildInputDecoration("申請理由", context),
             maxLength: 300,
@@ -131,9 +210,9 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   ) {
     return Container(
       width: width,
-      height: 32,
+      height: 64,
       child: TextField(
-        onChanged: (_) => _updateContext(),
+        onChanged: (_) => _updateScreenState(),
         controller: controller,
         keyboardType: keyboardType,
         decoration: InputDecoration(
