@@ -109,10 +109,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final User user = FirebaseAuth.instance.currentUser;
 
     dbHandler.getUserDoc(user.email).then((snapshot) {
-      if (snapshot.get(FieldPath(['role'])) == 1) {
+      //roleが1の時はHomeScreen()、roleが0の時はSalonApplicationScreen()
+      if (snapshot.get(FieldPath(['role'])) == 0) {
         Navigator.of(context).pushReplacementNamed('/salon_application_screen');
       }
-      if (snapshot.get(FieldPath(['role'])) == 0) {
+      if (snapshot.get(FieldPath(['role'])) == 1) {
         dbHandler.listSalonsByOwner(user.email).then(
           (snapshot) {
             if (snapshot.docs.isNotEmpty) {

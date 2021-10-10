@@ -2,10 +2,17 @@ import 'package:creator/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+
+  //TODO(PR_#9):サロン一覧の画面(概要)を作成する。
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -15,11 +22,14 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: _buildDrawer(context),
       body: Center(
-        child: Text(
-          'Hello World',
-          style: TextStyle(
-            fontSize: 40,
-          ),
+        child: ElevatedButton(
+          style: Theme.of(context).elevatedButtonTheme.style.copyWith(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                foregroundColor: MaterialStateProperty.all(Colors.black),
+              ),
+          onPressed: () => {
+            print("ボタンが押された"),
+          },
         ),
       ),
     );

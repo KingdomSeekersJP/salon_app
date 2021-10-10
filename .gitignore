@@ -19,3 +19,8 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+GoogleService-Info.plist
+.flutter-plugins-dependencies
+Podfile.lock
+ios/Runner.xcodeproj/project.pbxproj
