@@ -25,12 +25,10 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   void _updateScreenState() {
     setState(
       () {
-        _noFieldsEmpty = (
-            // contentController.text.isEmpty ||
-            firstNameController.text.isNotEmpty &&
-                lastNameController.text.isNotEmpty &&
-                emailController.text.isNotEmpty &&
-                reasonController.text.isNotEmpty);
+        _noFieldsEmpty = (firstNameController.text.isNotEmpty &&
+            lastNameController.text.isNotEmpty &&
+            emailController.text.isNotEmpty &&
+            reasonController.text.isNotEmpty);
       },
     );
   }
@@ -142,24 +140,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
 
     Navigator.of(context).pushReplacementNamed('/registration_success');
   }
-
-  // Future _submitForm() async {
-  //   setState(() {
-  //     _submitInProgress = true;
-  //   });
-
-  //   await sendSalonRegistrationThanksMail(
-  //     text: contentController.text,
-  //     fullName: "${lastNameController.text} ${firstNameController.text}",
-  //     phoneNumber: phoneNumberController.text,
-  //   );
-
-  //   setState(() {
-  //     _submitInProgress = false;
-  //   });
-
-  //   Navigator.of(context).pushReplacementNamed('/registration_success');
-  // }
 
   Widget _buildApplicationForms(double screenWidth) {
     return Column(
