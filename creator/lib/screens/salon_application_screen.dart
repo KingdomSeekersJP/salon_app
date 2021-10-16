@@ -38,7 +38,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     final mq = MediaQuery.of(context).size;
     final screenWidth = mq.width;
     final screenHeight = mq.height;
-    final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -52,30 +51,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         ),
       ),
       drawer: _buildDrawer(context),
-      body: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: [
-          _submitInProgress ? LinearProgressIndicator() : Container(),
-          SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                child: Center(
-                  child: ListView(
-                    children: [
-                      _buildFormDescription(),
-                      _buildApplicationForms(screenWidth),
-                      _buildSubmitButton(screenWidth, screenHeight),
-                      SizedBox(height: 32.0),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: _buildMainBody(context, screenWidth, screenHeight),
     );
   }
 
@@ -98,6 +74,125 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
             },
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildMainBody(
+      BuildContext context, double screenWidth, double screenHeight) {
+    return Stack(
+      alignment: AlignmentDirectional.topCenter,
+      children: [
+        _submitInProgress ? LinearProgressIndicator() : Container(),
+        SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+              child: Center(
+                child: ListView(
+                  children: [
+                    _buildFormDescription(),
+                    _buildApplicationForms(screenWidth),
+                    _buildSubmitButton(screenWidth, screenHeight),
+                    SizedBox(height: 32.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFormDescription() {
+    return Column(
+      children: [
+        Text(
+          "オンラインサロン\n作成申請",
+          style: Theme.of(context).textTheme.headline3,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 32),
+        Text(
+          "サロンを開設するために、\n必要事項のご入力をお願い致します",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        SizedBox(height: 32)
+      ],
+    );
+  }
+
+  Widget _buildApplicationForms(double screenWidth) {
+    return Column(
+      children: [
+        _buildTextFieldWithBorderline(
+          firstNameController,
+          TextInputType.name,
+          "名前",
+          screenWidth,
+        ),
+        SizedBox(height: 16),
+        _buildTextFieldWithBorderline(
+          lastNameController,
+          TextInputType.name,
+          "名字",
+          screenWidth,
+        ),
+        SizedBox(height: 16),
+        //TODO(PR_#8):google login時には、最初からメールアドレスをつけておく。
+        _buildTextFieldWithBorderline(
+          emailController,
+          TextInputType.emailAddress,
+          "メールアドレス",
+          screenWidth,
+        ),
+        SizedBox(height: 16),
+        _buildReasonTextField(),
+      ],
+    );
+  }
+
+  Widget _buildReasonTextField() {
+    return Container(
+      width: double.infinity,
+      height: 300,
+      child: TextField(
+        controller: reasonController,
+        onChanged: (_) => _updateScreenState(),
+        style: Theme.of(context).textTheme.bodyText1,
+        decoration: buildInputDecoration("申請理由", context),
+        maxLength: 300,
+        maxLines: 10,
+      ),
+    );
+  }
+
+  Widget _buildTextFieldWithBorderline(
+    TextEditingController controller,
+    TextInputType keyboardType,
+    String label,
+    double width,
+  ) {
+    return Container(
+      width: width,
+      height: 64,
+      child: TextField(
+        onChanged: (_) => _updateScreenState(),
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 0.5),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 0.5),
+          ),
+          hintText: label,
+        ),
       ),
     );
   }
@@ -139,92 +234,5 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     });
 
     Navigator.of(context).pushReplacementNamed('/registration_success');
-  }
-
-  Widget _buildApplicationForms(double screenWidth) {
-    return Column(
-      children: [
-        _buildTextFieldWithBorderline(
-          firstNameController,
-          TextInputType.name,
-          "名前",
-          screenWidth,
-        ),
-        SizedBox(height: 16),
-        _buildTextFieldWithBorderline(
-          lastNameController,
-          TextInputType.name,
-          "名字",
-          screenWidth,
-        ),
-        SizedBox(height: 16),
-        //TODO(PR_#8):google login時には、最初からメールアドレスをつけておく。
-        _buildTextFieldWithBorderline(
-          emailController,
-          TextInputType.emailAddress,
-          "メールアドレス",
-          screenWidth,
-        ),
-        SizedBox(height: 16),
-        Container(
-          width: double.infinity,
-          height: 300,
-          child: TextField(
-            controller: reasonController,
-            onChanged: (_) => _updateScreenState(),
-            style: Theme.of(context).textTheme.bodyText1,
-            decoration: buildInputDecoration("申請理由", context),
-            maxLength: 300,
-            maxLines: 10,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTextFieldWithBorderline(
-    TextEditingController controller,
-    TextInputType keyboardType,
-    String label,
-    double width,
-  ) {
-    return Container(
-      width: width,
-      height: 64,
-      child: TextField(
-        onChanged: (_) => _updateScreenState(),
-        controller: controller,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 0.5),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 0.5),
-          ),
-          hintText: label,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFormDescription() {
-    return Column(
-      children: [
-        Text(
-          "オンラインサロン\n作成申請",
-          style: Theme.of(context).textTheme.headline3,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 32),
-        Text(
-          "サロンを開設するために、\n必要事項のご入力をお願い致します",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-        SizedBox(height: 32)
-      ],
-    );
   }
 }
