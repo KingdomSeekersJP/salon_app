@@ -199,7 +199,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   }
 
   Widget _buildMailAddressIfFirebaseIsLoggedIn(double screenWidth) {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (FirebaseAuth.instance.currentUser == null) {
       //Firebaseでメールアドレスを取得していない場合
       return _buildTextFieldWithBorderline(
         emailController,
