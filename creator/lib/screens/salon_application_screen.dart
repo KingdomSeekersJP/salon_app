@@ -16,7 +16,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   bool _noFieldsEmpty = false;
   bool _submitInProgress = false;
 
-  // final contentController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -25,10 +24,18 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   void _updateScreenState() {
     setState(
       () {
-        _noFieldsEmpty = (firstNameController.text.isNotEmpty &&
-            lastNameController.text.isNotEmpty &&
-            emailController.text.isNotEmpty &&
-            reasonController.text.isNotEmpty);
+        if (FirebaseAuth.instance.currentUser == null) {
+          //Firebaseでメールアドレスを取得していない場合
+          _noFieldsEmpty = (firstNameController.text.isNotEmpty &&
+              lastNameController.text.isNotEmpty &&
+              emailController.text.isNotEmpty &&
+              reasonController.text.isNotEmpty);
+        } else {
+          //Firebaseでメールアドレスを取得できる場合は、Textでメールアドレスを記載
+          _noFieldsEmpty = (firstNameController.text.isNotEmpty &&
+              lastNameController.text.isNotEmpty &&
+              reasonController.text.isNotEmpty);
+        }
       },
     );
   }
@@ -138,17 +145,11 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         _buildTextFieldWithBorderline(
           lastNameController,
           TextInputType.name,
-          "名字",
+          "苗字",
           screenWidth,
         ),
         SizedBox(height: 16),
-        //TODO(PR_#8):google login時には、最初からメールアドレスをつけておく。
-        _buildTextFieldWithBorderline(
-          emailController,
-          TextInputType.emailAddress,
-          "メールアドレス",
-          screenWidth,
-        ),
+        _buildMailAddressIfFirebaseIsLoggedIn(screenWidth),
         SizedBox(height: 16),
         _buildReasonTextField(),
       ],
@@ -195,6 +196,36 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildMailAddressIfFirebaseIsLoggedIn(double screenWidth) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      //Firebaseでメールアドレスを取得していない場合
+      return _buildTextFieldWithBorderline(
+        emailController,
+        TextInputType.emailAddress,
+        "メールアドレス",
+        screenWidth,
+      );
+    } else {
+      //Firebaseでメールアドレスを取得できる場合は、Textでメールアドレスを記載
+      return Container(
+        width: screenWidth,
+        height: 64,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            top: 16,
+          ),
+          child: Text(
+            FirebaseAuth.instance.currentUser.email,
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildSubmitButton(double screenWidth, double screenHeight) {
