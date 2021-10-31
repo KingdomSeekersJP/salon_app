@@ -135,21 +135,21 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   Widget _buildApplicationForms(double screenWidth) {
     return Column(
       children: [
+        _buildMailAddressIfFirebaseIsLoggedIn(screenWidth),
+        SizedBox(height: 16),
         _buildTextFieldWithBorderline(
           firstNameController,
           TextInputType.name,
-          "名前",
+          "First Name",
           screenWidth,
         ),
         SizedBox(height: 16),
         _buildTextFieldWithBorderline(
           lastNameController,
           TextInputType.name,
-          "苗字",
+          "Last Name",
           screenWidth,
         ),
-        SizedBox(height: 16),
-        _buildMailAddressIfFirebaseIsLoggedIn(screenWidth),
         SizedBox(height: 16),
         _buildReasonTextField(),
       ],
@@ -204,7 +204,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       return _buildTextFieldWithBorderline(
         emailController,
         TextInputType.emailAddress,
-        "メールアドレス",
+        "Email Address",
         screenWidth,
       );
     } else {
@@ -212,9 +212,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       return Container(
         width: screenWidth,
         height: 64,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-        ),
         child: Padding(
           padding: const EdgeInsets.only(
             left: 16,
@@ -222,6 +219,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
           ),
           child: Text(
             FirebaseAuth.instance.currentUser.email,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       );
