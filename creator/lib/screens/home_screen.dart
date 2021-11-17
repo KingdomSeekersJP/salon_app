@@ -41,18 +41,28 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: Text("ホーム"),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
       ),
-      drawer: _buildDrawer(context),
+      drawer: _buildDrawer(
+        context,
+      ),
       body: ListView.builder(
         // ignore: missing_return
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
-            return CarouselWithDotsPage(imgList: imgCarouselList);
+            return CarouselWithDotsPage(
+              imgList: imgCarouselList,
+            );
           } else if (index % 2 == 0) {
-            return buildImageCardOne(index - 1);
+            return buildImageCardOne(
+              index - 1,
+            );
           } else if (index % 2 == 1) {
-            return buildImageCardTwo(index - 1);
+            return buildImageCardTwo(
+              index - 1,
+            );
           }
         },
         itemCount: titleList.length + 1,
@@ -85,7 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildImageCardOne(int index) => Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(
+            24,
+          ),
         ),
         child: Stack(
           alignment: Alignment.topRight,
@@ -101,7 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 240,
               fit: BoxFit.cover,
             ),
-            _decolorationOfCardTextMessage(index),
+            _decolorationOfCardTextMessage(
+              index,
+            ),
           ],
         ),
       );
@@ -110,24 +124,34 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SizedBox(height: 24),
+        SizedBox(
+          height: 24,
+        ),
         Center(
           child: Text(
             titleList[index],
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 16,
+            ),
           ),
         ),
-        SizedBox(height: 50),
+        SizedBox(
+          height: 50,
+        ),
         Center(
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(
+              12.0,
+            ),
             child: Text(
               subList[index],
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 8),
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 8,
+              ),
             ),
           ),
         ),
@@ -138,7 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildImageCardTwo(int index) => Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(
+            24,
+          ),
         ),
         child: Stack(
           alignment: Alignment.center,
@@ -156,9 +182,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               titleList[index],
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 24),
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 24,
+              ),
             ),
           ],
         ),
@@ -185,8 +212,18 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(200, 0, 0, 0),
-              Color.fromARGB(0, 0, 0, 0),
+              Color.fromARGB(
+                200,
+                0,
+                0,
+                0,
+              ),
+              Color.fromARGB(
+                0,
+                0,
+                0,
+                0,
+              ),
             ],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
@@ -212,7 +249,9 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: widget.imgList.map((url) {
-        int index = widget.imgList.indexOf(url);
+        int index = widget.imgList.indexOf(
+          url,
+        );
         return Container(
           width: 8,
           height: 8,
@@ -223,8 +262,18 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: _current == index
-                ? Color.fromRGBO(0, 0, 0, 0.9)
-                : Color.fromRGBO(0, 0, 0, 0.4),
+                ? Color.fromRGBO(
+                    0,
+                    0,
+                    0,
+                    0.9,
+                  )
+                : Color.fromRGBO(
+                    0,
+                    0,
+                    0,
+                    0.4,
+                  ),
           ),
         );
       }).toList(),
@@ -234,31 +283,51 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> imageSliders = widget.imgList
-        .map((item) => Container(
+        .map(
+          (item) => Container(
             child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                child: Stack(
-                  children: [
-                    Image.network(item, fit: BoxFit.cover, width: 1000),
-                    _bottomTextOfCarousel(item),
-                  ],
-                ))))
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  20.0,
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Image.network(
+                    item,
+                    fit: BoxFit.cover,
+                    width: 1000,
+                  ),
+                  _bottomTextOfCarousel(
+                    item,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
         .toList();
 
     return Column(
       children: [
-        SizedBox(height: 10),
+        SizedBox(
+          height: 10,
+        ),
         CarouselSlider(
-            items: imageSliders,
-            options: CarouselOptions(
-                autoPlay: false,
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                })),
+          items: imageSliders,
+          options: CarouselOptions(
+            autoPlay: false,
+            enlargeCenterPage: true,
+            aspectRatio: 2.0,
+            onPageChanged: (index, reason) {
+              setState(
+                () {
+                  _current = index;
+                },
+              );
+            },
+          ),
+        ),
         _dotPageStateOfCarousel()
       ],
     );
