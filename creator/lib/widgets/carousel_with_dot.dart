@@ -18,26 +18,7 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
       left: 0.0,
       right: 0.0,
       child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(
-                200,
-                0,
-                0,
-                0,
-              ),
-              Color.fromARGB(
-                0,
-                0,
-                0,
-                0,
-              ),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
-        ),
+        decoration: decoration_of_carousel_text(),
         padding: EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 10,
@@ -50,6 +31,29 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+    );
+  }
+
+  BoxDecoration decoration_of_carousel_text() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromARGB(
+            200,
+            0,
+            0,
+            0,
+          ),
+          Color.fromARGB(
+            0,
+            0,
+            0,
+            0,
+          ),
+        ],
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
       ),
     );
   }
@@ -68,24 +72,28 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
             vertical: 10,
             horizontal: 3,
           ),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _current == index
-                ? Color.fromRGBO(
-                    0,
-                    0,
-                    0,
-                    0.9,
-                  )
-                : Color.fromRGBO(
-                    0,
-                    0,
-                    0,
-                    0.4,
-                  ),
-          ),
+          decoration: decoration_of_carousel_dot(index),
         );
       }).toList(),
+    );
+  }
+
+  BoxDecoration decoration_of_carousel_dot(int index) {
+    return BoxDecoration(
+      shape: BoxShape.circle,
+      color: _current == index
+          ? Color.fromRGBO(
+              0,
+              0,
+              0,
+              0.9,
+            )
+          : Color.fromRGBO(
+              0,
+              0,
+              0,
+              0.4,
+            ),
     );
   }
 
