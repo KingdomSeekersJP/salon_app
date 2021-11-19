@@ -50,7 +50,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          "開設申請",
+          '開設申請',
           style: Theme.of(context).textTheme.headline3,
         ),
         iconTheme: IconThemeData(
@@ -67,9 +67,9 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       child: ListView(
         children: [
           ListTile(
-            title: Text("ログアウト"),
+            title: Text('ログアウト'),
             onTap: () async {
-              print("ログアウトボタンを押した");
+              print('ログアウトボタンを押した');
               await FirebaseAuth.instance.signOut();
               await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -117,13 +117,13 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     return Column(
       children: [
         Text(
-          "オンラインサロン\n作成申請",
+          'オンラインサロン\n作成申請',
           style: Theme.of(context).textTheme.headline3,
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 32),
         Text(
-          "サロンを開設するために、\n必要事項のご入力をお願い致します",
+          'サロンを開設するために、\n必要事項のご入力をお願い致します',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText1,
         ),
@@ -140,14 +140,14 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         _buildTextFieldWithBorderline(
           firstNameController,
           TextInputType.name,
-          "First Name",
+          'First Name',
           screenWidth,
         ),
         SizedBox(height: 16),
         _buildTextFieldWithBorderline(
           lastNameController,
           TextInputType.name,
-          "Last Name",
+          'Last Name',
           screenWidth,
         ),
         SizedBox(height: 16),
@@ -164,7 +164,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
         controller: reasonController,
         onChanged: (_) => _updateScreenState(),
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: buildInputDecoration("申請理由", context),
+        decoration: buildInputDecoration('申請理由', context),
         maxLength: 300,
         maxLines: 10,
       ),
@@ -204,7 +204,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       return _buildTextFieldWithBorderline(
         emailController,
         TextInputType.emailAddress,
-        "Email Address",
+        'Email Address',
         screenWidth,
       );
     } else {
@@ -228,17 +228,17 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
 
   Widget _buildSubmitButton(double screenWidth, double screenHeight) {
     return CustomButton(
-      text: "申請",
+      text: '申請',
       width: screenWidth * 0.4,
       height: screenHeight * 0.10,
       function: _noFieldsEmpty
           ? () async {
               showCustomDialog(
-                content: "内容にお間違えがなければ、\n送信ボタンを押してください\n確認メールを送信します",
+                content: '内容にお間違えがなければ、\n送信ボタンを押してください\n確認メールを送信します',
                 leftFunction: _noFieldsEmpty ? () => _submitForm() : null,
-                leftButtonText: "送信",
+                leftButtonText: '送信',
                 rightFunction: () => Navigator.pop(context),
-                rightButtonText: "取り消し",
+                rightButtonText: '取り消し',
                 context: context,
               );
             }

@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          content: Text("ログインに失敗しました\nもう一度お試しください"),
+          content: Text('ログインに失敗しました\nもう一度お試しください'),
           actions: [
             TextButton(
               onPressed: () {
@@ -219,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(
                     child: Text(
-                      "KS App",
+                      'KS App',
                       style: Theme.of(context).textTheme.headline1,
                     ),
                   ),
