@@ -12,7 +12,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("お申し込み完了"),
+        title: Text('お申し込み完了'),
       ),
       body: SafeArea(
         child: Container(
@@ -35,7 +35,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
     return Expanded(
         child: Center(
       child: Text(
-        "ご申請ありがとうございます\n確認のメール送付が完了しました\nご登録に差し当たり、数日以内に\n担当のものよりご連絡を差し上げますので\nご対応の程よろしくお願い致します",
+        'ご申請ありがとうございます\n確認のメール送付が完了しました\nご登録に差し当たり、数日以内に\n担当のものよりご連絡を差し上げますので\nご対応の程よろしくお願い致します',
         textAlign: TextAlign.center,
       ),
     ));
@@ -47,7 +47,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
     BuildContext context,
   ) {
     return CustomButton(
-      text: "ログイン画面",
+      text: 'ログイン画面',
       width: screenWidth * 0.4,
       height: screenHeight * 0.05,
       function: () {
