@@ -130,14 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 24,
         ),
         Center(
-          child: Text(
-            titleList[index],
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
+          child: _mainMessageOfSalonTopic(index),
         ),
         SizedBox(
           height: 50,
@@ -147,17 +140,32 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(
               12.0,
             ),
-            child: Text(
-              subList[index],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 8,
-              ),
-            ),
+            child: _subMessageOfSalonTopic(index),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _mainMessageOfSalonTopic(int index) {
+    return Text(
+      titleList[index],
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontSize: 16,
+      ),
+    );
+  }
+
+  Widget _subMessageOfSalonTopic(int index) {
+    return Text(
+      subList[index],
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontSize: 8,
+      ),
     );
   }
 
