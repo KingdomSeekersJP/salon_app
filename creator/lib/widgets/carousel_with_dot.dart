@@ -18,24 +18,22 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
       left: 0.0,
       right: 0.0,
       child: Container(
-        decoration: decoration_of_carousel_text(),
+        decoration: _buildCarouselTextDecoration(),
         padding: EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 10,
         ),
         child: Text(
           'No. ${widget.imgList.indexOf(item)} image',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12.0,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.subtitle2.apply(
+                color: Colors.white,
+              ),
         ),
       ),
     );
   }
 
-  BoxDecoration decoration_of_carousel_text() {
+  BoxDecoration _buildCarouselTextDecoration() {
     return BoxDecoration(
       gradient: LinearGradient(
         colors: [
@@ -72,13 +70,13 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
             vertical: 10,
             horizontal: 3,
           ),
-          decoration: decoration_of_carousel_dot(index),
+          decoration: _buildCarouselDotDecoration(index),
         );
       }).toList(),
     );
   }
 
-  BoxDecoration decoration_of_carousel_dot(int index) {
+  BoxDecoration _buildCarouselDotDecoration(int index) {
     return BoxDecoration(
       shape: BoxShape.circle,
       color: _current == index
