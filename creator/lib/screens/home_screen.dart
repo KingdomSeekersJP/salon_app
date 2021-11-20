@@ -59,11 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else if (index % 2 == 0) {
             return buildImageCardOne(
-              index - 1,
+              index - carouselCellCount,
             );
           } else if (index % 2 == 1) {
             return buildImageCardTwo(
-              index - 1,
+              index - carouselCellCount,
             );
           }
         },
@@ -97,9 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildImageCardOne(int index) => Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            24,
-          ),
+          borderRadius: BorderRadius.circular(24),
         ),
         child: Stack(
           alignment: Alignment.topRight,
@@ -150,22 +148,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _mainMessageOfSalonTopic(int index) {
     return Text(
       titleList[index],
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-        fontSize: 16,
-      ),
+      style: Theme.of(context).textTheme.headline3.apply(
+            color: Colors.white,
+          ),
     );
   }
 
   Widget _subMessageOfSalonTopic(int index) {
     return Text(
       subList[index],
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-        fontSize: 8,
-      ),
+      style: Theme.of(context).textTheme.headline6.apply(
+            color: Colors.white,
+          ),
     );
   }
 
@@ -191,11 +185,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text(
               titleList[index],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 24,
-              ),
+              style: Theme.of(context).textTheme.headline3.apply(
+                    color: Colors.white,
+                  ),
             ),
           ],
         ),

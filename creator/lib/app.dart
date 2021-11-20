@@ -101,6 +101,10 @@ class KSCreatorApp extends StatelessWidget {
               color: primaryColor,
               fontSize: 10,
             ),
+            headline6: TextStyle(
+              color: primaryColor,
+              fontSize: 8,
+            ),
           )
           .apply(
             fontFamily: 'NotoSansJP',
