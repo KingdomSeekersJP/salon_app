@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
         width: screenWidth < 600 ? screenWidth * 0.8 : screenWidth * 0.5,
         height: screenHeight * 0.06,
         child: ElevatedButton(
-          style: Theme.of(context).elevatedButtonTheme.style.copyWith(
+          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 foregroundColor: MaterialStateProperty.all(Colors.black),
               ),
@@ -104,51 +104,53 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _navigateBasedOnRole() {
+  void _navigateBasedOnRole() async {
     DbHandler dbHandler = DbHandler();
-    final User user = FirebaseAuth.instance.currentUser;
-
-    dbHandler.getUserDoc(user.email).then((snapshot) {
-      //roleが1の時はHomeScreen()、roleが0の時はSalonApplicationScreen()
-      if (snapshot.get(FieldPath(['role'])) == 0) {
-        Navigator.of(context).pushReplacementNamed('/salon_application_screen');
-      }
-      if (snapshot.get(FieldPath(['role'])) == 1) {
-        dbHandler.listSalonsByOwner(user.email).then(
-          (snapshot) {
-            if (snapshot.docs.isNotEmpty) {
-              Navigator.of(context).pushReplacementNamed('/home');
-            } else {
-              Navigator.of(context)
-                  .pushReplacementNamed('/salon_appliation_screen');
-            }
-          },
-        );
-      }
-      print(snapshot);
-    });
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      dbHandler.getUserDoc(user.email!).then((snapshot) {
+        //roleが1の時はHomeScreen()、roleが0の時はSalonApplicationScreen()
+        if (snapshot.get(FieldPath(['role'])) == 0) {
+          Navigator.of(context)
+              .pushReplacementNamed('/salon_application_screen');
+        }
+        if (snapshot.get(FieldPath(['role'])) == 1) {
+          dbHandler.listSalonsByOwner(user.email!).then(
+            (snapshot) {
+              if (snapshot.docs.isNotEmpty) {
+                Navigator.of(context).pushReplacementNamed('/home');
+              } else {
+                Navigator.of(context)
+                    .pushReplacementNamed('/salon_appliation_screen');
+              }
+            },
+          );
+        }
+      });
+    }
   }
 
   Future<void> _addToDatabase() async {
     DbHandler dbHandler = DbHandler();
-    final User user = FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
     if (FirebaseFirestore.instance
             .collection('users')
-            .doc(user.email)
+            .doc(user?.email)
             .snapshots() !=
         null) {
       return;
     }
 
     // データが無いとエラー可能性
-    if (user.email != null) {
-      assert(!user.isAnonymous);
-      assert(await user.getIdToken() != null);
+    if (user?.email != null) {
+      assert(!user!.isAnonymous);
+      assert(await user?.getIdToken() != null);
 
       dbHandler
           .addUser(UserModel(
-            email: user.email,
-            profile: UserProfileModel(name: user.displayName, aboutMeText: ''),
+            email: user!.email!,
+            profile: UserProfileModel(
+                name: user.displayName ?? "未設定", aboutMeText: ''),
             role: RoleType.member,
             settings: UserSettings(pushNotifications: true),
             created: DateTime.now().toUtc(),
@@ -177,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _tryLoginWith(BuildContext context, method) async {
-    final User user = FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
     setState(() {
       _loginInProgress = true;
     });
