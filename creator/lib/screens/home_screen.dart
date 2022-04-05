@@ -28,7 +28,7 @@ final List<String> subList = [
 ];
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
               index - carouselCellCount,
             );
           }
+          return Container();
         },
         itemCount: listCellCount + carouselCellCount,
       ),
@@ -79,14 +80,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ListTile(
             title: Text('ログアウト'),
             onTap: () async {
-              await FirebaseAuth.instance.signOut();
-              await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return LoginScreen();
-                  },
-                ),
-              );
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                await FirebaseAuth.instance.signOut();
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return LoginScreen();
+                    },
+                  ),
+                );
+              }
             },
           )
         ],
@@ -148,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _mainMessageOfSalonTopic(int index) {
     return Text(
       titleList[index],
-      style: Theme.of(context).textTheme.headline3.apply(
+      style: Theme.of(context).textTheme.headline3?.apply(
             color: Colors.white,
           ),
     );
@@ -157,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _subMessageOfSalonTopic(int index) {
     return Text(
       subList[index],
-      style: Theme.of(context).textTheme.headline6.apply(
+      style: Theme.of(context).textTheme.headline6?.apply(
             color: Colors.white,
           ),
     );
@@ -185,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text(
               titleList[index],
-              style: Theme.of(context).textTheme.headline3.apply(
+              style: Theme.of(context).textTheme.headline3?.apply(
                     color: Colors.white,
                   ),
             ),

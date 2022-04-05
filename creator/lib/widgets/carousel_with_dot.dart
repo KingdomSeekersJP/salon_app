@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CarouselWithDotsPage extends StatefulWidget {
   List<String> imgList;
-  CarouselWithDotsPage({this.imgList, Key key}) : super(key: key);
+  CarouselWithDotsPage({required this.imgList, Key? key}) : super(key: key);
 
   @override
   _CarouselWithDotsPageState createState() => _CarouselWithDotsPageState();
@@ -25,7 +25,7 @@ class _CarouselWithDotsPageState extends State<CarouselWithDotsPage> {
         ),
         child: Text(
           'No. ${widget.imgList.indexOf(item)} image',
-          style: Theme.of(context).textTheme.subtitle2.apply(
+          style: Theme.of(context).textTheme.subtitle2?.apply(
                 color: Colors.white,
               ),
         ),
