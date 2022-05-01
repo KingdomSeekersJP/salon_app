@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> sendSalonRegstrationThanksMail({
   fullName,
-  // email,
   text,
 }) async {
   try {
@@ -13,7 +12,6 @@ Future<void> sendSalonRegstrationThanksMail({
       'mail': FirebaseAuth.instance.currentUser?.email,
       'fullName': fullName,
       'text': text
-      // 'email': FirebaseAuth.instance.currentUser?.email
     });
   } on FirebaseFunctionsException catch (e) {
     print(e);
