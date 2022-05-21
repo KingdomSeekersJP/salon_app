@@ -4,8 +4,8 @@ class UserProfileModel {
   // String imageUrl;
 
   UserProfileModel({
-    this.name,
-    this.aboutMeText,
+    required this.name,
+    required this.aboutMeText,
     //   required this.imageUrl,
   });
 

@@ -60,7 +60,7 @@ Widget _buildDialogButtons(
     children: [
       Expanded(
         child: TextButton(
-          style: Theme.of(context).textButtonTheme.style.copyWith(
+          style: Theme.of(context).textButtonTheme.style?.copyWith(
                 foregroundColor: MaterialStateProperty.all(Colors.white),
               ),
           onPressed: leftFunction,
@@ -81,7 +81,7 @@ Widget _buildDialogButtons(
             style: Theme.of(context)
                 .textTheme
                 .bodyText1
-                .copyWith(color: Colors.white),
+                ?.copyWith(color: Colors.white),
           ),
         ),
       ),
