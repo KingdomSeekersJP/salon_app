@@ -35,9 +35,9 @@
 namespace firebase {
 namespace firestore {
 
-namespace auth {
+namespace credentials {
 class User;
-}  // namespace auth
+}  // namespace credentials
 
 namespace core {
 class Query;
@@ -51,6 +51,7 @@ class TargetChange;
 namespace local {
 
 class BundleCache;
+class IndexManager;
 class LocalDocumentsView;
 class LocalViewChanges;
 class LocalWriteResult;
@@ -108,7 +109,7 @@ class LocalStore : public bundle::BundleCallback {
  public:
   LocalStore(Persistence* persistence,
              QueryEngine* query_engine,
-             const auth::User& initial_user);
+             const credentials::User& initial_user);
 
   ~LocalStore();
 
@@ -121,7 +122,7 @@ class LocalStore : public bundle::BundleCallback {
    * In response the local store switches the mutation queue to the new user and
    * returns any resulting document changes.
    */
-  model::DocumentMap HandleUserChange(const auth::User& user);
+  model::DocumentMap HandleUserChange(const credentials::User& user);
 
   /** Accepts locally generated Mutations and commits them to storage. */
   LocalWriteResult WriteLocally(std::vector<model::Mutation>&& mutations);
@@ -352,6 +353,11 @@ class LocalStore : public bundle::BundleCallback {
    * indexes).
    */
   QueryEngine* query_engine_ = nullptr;
+
+  /**
+   * Manages indexes and support indexed queries.
+   */
+  IndexManager* index_manager_ = nullptr;
 
   /**
    * The "local" view of all documents (layering mutation queue on top of
