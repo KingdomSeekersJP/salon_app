@@ -1,4 +1,6 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:creator/common/decoration.dart';
+import 'package:creator/common/email.dart';
 import 'package:creator/screens/login_screen.dart';
 import 'package:creator/widgets/custom_button.dart';
 import 'package:creator/widgets/custom_dialog.dart';
@@ -13,6 +15,9 @@ class SalonApplicationScreen extends StatefulWidget {
 }
 
 class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
+  final HttpsCallable callable =
+      FirebaseFunctions.instance.httpsCallable('genericEmail');
+
   bool _noFieldsEmpty = false;
   bool _submitInProgress = false;
 
@@ -255,12 +260,11 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     setState(() {
       _submitInProgress = true;
     });
-    //TODO: ここで登録メールを送信する。現在、未実装のためゴスペルサロンのコードを入れているが、コメントアウトしている。
-    //   await sendSalonRegistrationThanksMail(
-    //     text: contentController.text,
-    //     fullName: "${lastNameController.text} ${firstNameController.text}",
-    //     phoneNumber: phoneNumberController.text,
-    //   );
+
+    await sendSalonRegstrationThanksMail(
+      text: reasonController.text,
+      fullName: "${lastNameController.text} ${firstNameController.text}",
+    );
 
     //登録メールの送信が完了したらロードビューを閉じる
     setState(() {
