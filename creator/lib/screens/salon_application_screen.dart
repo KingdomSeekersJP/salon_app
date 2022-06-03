@@ -18,10 +18,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   final HttpsCallable callable =
       FirebaseFunctions.instance.httpsCallable('genericEmail');
 
-  final FirebaseAuth auth = FirebaseAuth.instance;
-
-  String emailAddress = 'kondo.matr02@gmail.com';
-
   bool _noFieldsEmpty = false;
   bool _submitInProgress = false;
 
@@ -259,13 +255,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     );
   }
 
-  sendEmail() {
-    return callable.call({
-      'text': 'Sending email with Flutter and SendGrid is fun!',
-      'subject': 'Email from Flutter'
-    }).then((res) => print(res.data));
-  }
-
   Future _submitForm() async {
     //登録メールを送っているときには、ロードビューを表示させる
     setState(() {
@@ -276,8 +265,6 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       text: reasonController.text,
       fullName: "${lastNameController.text} ${firstNameController.text}",
     );
-
-    // await sendEmail();
 
     //登録メールの送信が完了したらロードビューを閉じる
     setState(() {

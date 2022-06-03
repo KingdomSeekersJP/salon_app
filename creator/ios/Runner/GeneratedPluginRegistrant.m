@@ -48,10 +48,10 @@
 @import flutter_email_sender;
 #endif
 
-#if __has_include(<google_sign_in/FLTGoogleSignInPlugin.h>)
-#import <google_sign_in/FLTGoogleSignInPlugin.h>
+#if __has_include(<google_sign_in_ios/FLTGoogleSignInPlugin.h>)
+#import <google_sign_in_ios/FLTGoogleSignInPlugin.h>
 #else
-@import google_sign_in;
+@import google_sign_in_ios;
 #endif
 
 #if __has_include(<image_picker_ios/FLTImagePickerPlugin.h>)
