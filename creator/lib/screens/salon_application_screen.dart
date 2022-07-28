@@ -69,8 +69,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
           ListTile(
             title: Text('ログアウト'),
             onTap: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              if (user != null) {
+              if (FirebaseAuth.instance.currentUser != null) {
                 print('ログアウトボタンを押した');
                 await FirebaseAuth.instance.signOut();
                 await Navigator.of(context).pushReplacement(
@@ -221,7 +220,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
             top: 16,
           ),
           child: Text(
-            FirebaseAuth.instance.currentUser?.email ?? "",
+            FirebaseAuth.instance.currentUser?.email ?? '',
             style: TextStyle(color: Colors.grey),
           ),
         ),

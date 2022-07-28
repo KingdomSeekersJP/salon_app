@@ -22,7 +22,7 @@ class _CustomButtonState extends State<CustomButton> {
       height: widget.height,
       child: ElevatedButton(
         child: FittedBox(
-          child: Text(widget.text ?? ""),
+          child: Text(widget.text ?? ''),
         ),
         onPressed: widget.function,
       ),
