@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 bool userLoggedIn = false;
 
 class KSCreatorApp extends StatelessWidget {
-  const KSCreatorApp({Key key}) : super(key: key);
+  const KSCreatorApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -114,17 +114,18 @@ class KSCreatorApp extends StatelessWidget {
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection(DbHandler.usersColletion)
-          .doc(FirebaseAuth.instance.currentUser.email)
+          .doc(FirebaseAuth.instance.currentUser?.email)
           .snapshots(),
       builder: (_, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         }
         // roleが1の時はHomeScreen()、roleが0の時はSalonApplicationScreen()
-        if (snapshot.data.exists &&
-            snapshot.data.get(FieldPath(['role'])) == 1) {
+        //強制アンラップを入れています！
+        if (snapshot.data!.exists &&
+            snapshot.data?.get(FieldPath(['role'])) == 1) {
           return HomeScreen();
-        } else if (snapshot.data.get(FieldPath(['role'])) == 0) {
+        } else if (snapshot.data?.get(FieldPath(['role'])) == 0) {
           return SalonApplicationScreen();
         }
         return LoginScreen();

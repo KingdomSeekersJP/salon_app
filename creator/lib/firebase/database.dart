@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:creator/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class DbHandler {
+abstract class DbHandlerAbstract {
+  Future updateUser(UserModel userModel);
+}
+
+class DbHandler implements DbHandlerAbstract {
   static final String usersColletion = 'users';
   static final String salonsCollection = 'salons';
 
@@ -15,6 +19,7 @@ class DbHandler {
         FirebaseFirestore.instance.collection(salonsCollection);
   }
 
+  @override
   Future updateUser(UserModel userModel) async =>
       await userCollectionRef.doc(userModel.email).update(userModel.toMap());
 
@@ -26,7 +31,7 @@ class DbHandler {
     return dbObject = UserModel.fromMap(dbObject.data());
   }
 
-  Future getUserDoc(String email) async {
+  Future<DocumentSnapshot> getUserDoc(String email) async {
     return await userCollectionRef.doc(email).get();
   }
 

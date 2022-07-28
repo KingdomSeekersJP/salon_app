@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SalonApplicationScreen extends StatefulWidget {
-  const SalonApplicationScreen({Key key}) : super(key: key);
+  const SalonApplicationScreen({Key? key}) : super(key: key);
 
   @override
   _SalonApplicationScreenState createState() => _SalonApplicationScreenState();
@@ -69,15 +69,17 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
           ListTile(
             title: Text('ログアウト'),
             onTap: () async {
-              print('ログアウトボタンを押した');
-              await FirebaseAuth.instance.signOut();
-              await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return LoginScreen();
-                  },
-                ),
-              );
+              if (FirebaseAuth.instance.currentUser != null) {
+                print('ログアウトボタンを押した');
+                await FirebaseAuth.instance.signOut();
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return LoginScreen();
+                    },
+                  ),
+                );
+              }
             },
           )
         ],
@@ -218,7 +220,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
             top: 16,
           ),
           child: Text(
-            FirebaseAuth.instance.currentUser.email,
+            FirebaseAuth.instance.currentUser?.email ?? '',
             style: TextStyle(color: Colors.grey),
           ),
         ),
@@ -232,10 +234,11 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
       width: screenWidth * 0.4,
       height: screenHeight * 0.10,
       function: _noFieldsEmpty
-          ? () async {
+          ? () {
               showCustomDialog(
                 content: '内容にお間違えがなければ、\n送信ボタンを押してください\n確認メールを送信します',
-                leftFunction: _noFieldsEmpty ? () => _submitForm() : null,
+                leftFunction:
+                    _noFieldsEmpty ? () async => await _submitForm() : null,
                 leftButtonText: '送信',
                 rightFunction: () => Navigator.pop(context),
                 rightButtonText: '取り消し',
@@ -247,10 +250,10 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
   }
 
   Future _submitForm() async {
+    //登録メールを送っているときには、ロードビューを表示させる
     setState(() {
       _submitInProgress = true;
     });
-
     //TODO: ここで登録メールを送信する。現在、未実装のためゴスペルサロンのコードを入れているが、コメントアウトしている。
     //   await sendSalonRegistrationThanksMail(
     //     text: contentController.text,
@@ -258,6 +261,7 @@ class _SalonApplicationScreenState extends State<SalonApplicationScreen> {
     //     phoneNumber: phoneNumberController.text,
     //   );
 
+    //登録メールの送信が完了したらロードビューを閉じる
     setState(() {
       _submitInProgress = false;
     });
